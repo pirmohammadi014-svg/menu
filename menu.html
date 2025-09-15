@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>کترینگ اوستا — منو</title>
+<link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0f1724;--card:#0b1226;--muted:#9aa6b2;--accent:#22c55e;--accent2:#06b6d4;--text:#e6eef6}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0;height:100%;font-family:'Vazirmatn',system-ui;background:linear-gradient(160deg,#071029 0%, #0b1226 60%);color:var(--text)}
+.container{max-width:1100px;margin:14px auto;padding:16px}
+header{display:flex;align-items:center;justify-content:space-between;gap:12px;background:rgba(255,255,255,0.02);padding:12px;border-radius:12px}
+h1{margin:0;font-size:20px}
+.meta{color:var(--muted);font-size:13px}
+.controls{display:flex;gap:8px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.search{padding:10px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--text);min-width:220px}
+.layout{display:grid;grid-template-columns:1fr 360px;gap:16px;margin-top:16px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:14px}
+.card{background:linear-gradient(180deg,#0f1724,#071122);border:1px solid rgba(255,255,255,0.04);padding:12px;border-radius:12px;display:flex;flex-direction:column;gap:8px}
+.food-img{width:100%;height:160px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,0.03)}
+.row{display:flex;align-items:center;justify-content:space-between}
+.price{font-weight:700}
+.btn{border:0;padding:10px 12px;border-radius:10px;cursor:pointer;font-weight:700}
+.btn-add{background:var(--accent);color:#052410}
+.aside{background:linear-gradient(180deg,#071226,#071022);padding:14px;border-radius:12px;border:1px solid rgba(255,255,255,0.03);height:max-content;position:sticky;top:16px}
+label{display:block;font-size:13px;color:var(--muted);margin-top:8px}
+input[type="text"]{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.03);background:transparent;color:var(--text)}
+.cart-list{margin-top:12px;display:flex;flex-direction:column;gap:8px;max-height:320px;overflow:auto;padding-right:6px}
+.cart-item{display:flex;justify-content:space-between;gap:8px;padding:10px;background:linear-gradient(180deg,#071826,#05121a);border-radius:8px;border:1px solid rgba(255,255,255,0.02)}
+.checkout{margin-top:12px;background:var(--accent2);color:#001018;padding:12px;border-radius:10px;border:0;cursor:pointer;width:100%;font-weight:800}
+.footer{text-align:center;color:var(--muted);font-size:13px;margin-top:18px}
+@media(max-width:960px){.layout{grid-template-columns:1fr}.aside{position:static}}
+.small{color:var(--muted);font-size:13px}
+</style>
+<script type="module">
+import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm'
+const supabaseUrl = "https://btwyxylbtwjvahciqwiq.supabase.co";
+const supabaseAnonKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0d3l4eWxidHdqdmFoY2lxd2lxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MDQzMzQsImV4cCI6MjA3Mjk4MDMzNH0.yR3kq5iv4XYdEOYXpkKtBKhUb8hvPCs3XeykRmwLDvE";
+const supabase = createClient(supabaseUrl, supabaseAnonKey);
+
+// منوی کامل (از تصویر شما)
+const foods = [
+  {id:1,name:"چلو کوبیده",price:320000,img:"https://i.ibb.co/dBtTQ7w/kabab.jpg",cat:"غذای اصلی"},
+  {id:2,name:"چلو جوجه",price:220000,img:"https://i.ibb.co/g6G9W2p/joojeh.jpg",cat:"غذای اصلی"},
+  {id:3,name:"چلو جوجه با سس مخصوص",price:340000,img:"https://i.imgur.com/2X8Zz7K.jpg",cat:"غذای اصلی"},
+  {id:4,name:"چلو گوشت",price:340000,img:"https://i.imgur.com/8V6kK6j.jpg",cat:"غذای اصلی"},
+  {id:5,name:"چلو مرغ",price:180000,img:"https://i.imgur.com/o8QZ7vO.jpg",cat:"غذای اصلی"},
+  {id:6,name:"چلو میکس",price:280000,img:"https://i.imgur.com/TZxqk2H.jpg",cat:"غذای اصلی"},
+  {id:7,name:"چلو وزیری",price:350000,img:"https://i.imgur.com/6hQk2s9.jpg",cat:"غذای اصلی"},
+  {id:8,name:"خوراک جوجه",price:150000,img:"https://i.imgur.com/1X5YFfU.jpg",cat:"غذای اصلی"},
+  {id:9,name:"چلو کره",price:70000,img:"https://i.imgur.com/9QpQX2L.jpg",cat:"غذای اصلی"},
+  {id:10,name:"چلو بختیاری",price:280000,img:"https://i.imgur.com/0qRzltX.jpg",cat:"غذای اصلی"},
+  {id:11,name:"چلو برگ",price:280000,img:"https://i.imgur.com/3Qm1K4B.jpg",cat:"غذای اصلی"},
+  {id:12,name:"چلو سلطانی",price:350000,img:"https://i.imgur.com/h5JXgUv.jpg",cat:"غذای اصلی"},
+  {id:13,name:"چلو قورمه",price:160000,img:"https://i.ibb.co/LhcgTVF/ghorme.jpg",cat:"غذای اصلی"},
+  {id:14,name:"چلو قیمه",price:160000,img:"https://i.ibb.co/LQgjQ3w/qeimeh.jpg",cat:"غذای اصلی"},
+  {id:15,name:"چلو تاوا کبابی تنوری",price:250000,img:"https://i.imgur.com/4x6Kf2P.jpg",cat:"غذای اصلی"},
+  {id:16,name:"خوراک کوبیده (سیخی)",price:70000,img:"https://i.imgur.com/5Z0Z1vQ.jpg",cat:"پیش‌غذا"},
+  {id:17,name:"گوجه سیخی",price:5000,img:"https://i.imgur.com/1GzZK5E.jpg",cat:"پیش‌غذا"}
+];
+
+let state = {q:'',cat:'همه'};
+const cats = ['همه','غذای اصلی','پیش‌غذا','نوشیدنی'];
+const cart = {}
+const t = n => n.toLocaleString('fa-IR');
+
+function renderCats(){
+  const el = document.getElementById('cats'); el.innerHTML='';
+  cats.forEach(c=>{ const b = document.createElement('button'); b.textContent=c; b.className='cat'; if(c===state.cat) b.style.fontWeight='700'; b.onclick=()=>{ state.cat=c; renderList(); renderCats(); }; el.appendChild(b); })
+}
+
+function filtered(){ return foods.filter(f=> (state.cat==='همه' || f.cat===state.cat) && (!state.q || f.name.includes(state.q))); }
+
+function renderList(){
+  const grid = document.getElementById('list'); grid.innerHTML='';
+  filtered().forEach(f=>{
+    const card = document.createElement('div'); card.className='card';
+    card.innerHTML = `
+      <img class="food-img" src="${f.img}" alt="${f.name}" />
+      <div><strong>${f.name}</strong></div>
+      <div class="row"><div class="small">${f.cat}</div><div class="price">${t(f.price)} تومان</div></div>
+      <div class="row"><div><button class="btn" onclick="decPreview(${f.id})">−</button> <b id="q-${f.id}">0</b> <button class="btn" onclick="incPreview(${f.id})">+</button></div><button class="btn btn-add" onclick="addToCart(${f.id})">افزودن</button></div>
+    `;
+    grid.appendChild(card);
+  })
+}
+
+window.incPreview = function(id){ const el = document.getElementById("q-"+id); let cur = parseInt(el.textContent.replace(/,/g,''))||0; el.textContent = (cur+1).toLocaleString('fa-IR'); }
+window.decPreview = function(id){ const el = document.getElementById("q-"+id); let cur = parseInt(el.textContent.replace(/,/g,''))||0; el.textContent = Math.max(0,cur-1).toLocaleString('fa-IR'); }
+
+window.addToCart = function(id){ const item = foods.find(f=>f.id===id); if(!item) return; cart[id] = cart[id] || {item:item,qty:0}; cart[id].qty++; renderCart(); document.getElementById("q-"+id).textContent = cart[id].qty.toLocaleString('fa-IR'); }
+
+function decQty(id){ if(!cart[id]) return; cart[id].qty--; if(cart[id].qty<=0) delete cart[id]; renderCart(); const qel = document.getElementById("q-"+id); if(qel) qel.textContent = (cart[id]?.qty||0).toLocaleString('fa-IR'); }
+function removeFromCart(id){ if(!cart[id]) return; delete cart[id]; renderCart(); const qel = document.getElementById("q-"+id); if(qel) qel.textContent='0'; }
+
+function renderCart(){
+  const list = document.getElementById('cartList'); list.innerHTML=''; let total=0;
+  Object.values(cart).forEach(ci=>{ total += ci.item.price * ci.qty; const div = document.createElement('div'); div.className='cart-item'; div.innerHTML = `<div>${ci.item.name} × ${ci.qty}</div><div><button onclick="decQty(${ci.item.id})" class="btn">−</button> <button onclick="removeFromCart(${ci.item.id})" class="btn">حذف</button></div>`; list.appendChild(div); })
+  document.getElementById('total').textContent = total? t(total) + ' تومان' : '۰ تومان';
+}
+
+async function submitOrder(){
+  const table = document.getElementById('table').value.trim();
+  const customer = document.getElementById('customer').value.trim();
+  if(!table && !customer){ alert('لطفاً شماره میز یا نام مشتری را وارد کنید.'); return; }
+  if(Object.keys(cart).length===0){ alert('سبد خرید خالی است.'); return; }
+  const items = Object.values(cart).map(ci=>({id:ci.item.id,name:ci.item.name,price:ci.item.price,qty:ci.qty}));
+  const total = items.reduce((s,i)=>s+i.price*i.qty,0);
+  const payload = { customer: customer||null, table_number: table||null, items, total, status:'new', created_at: new Date().toISOString() };
+  const { data, error } = await supabase.from('orders').insert([payload]);
+  if(error){ console.error(error); alert('خطا در ارسال سفارش: ' + error.message); return; }
+  alert('سفارش ثبت شد ✅');
+  for(const k of Object.keys(cart)) delete cart[k]; renderCart(); document.getElementById('customer').value=''; document.getElementById('table').value='';
+}
+
+window.addEventListener('DOMContentLoaded', ()=>{ renderCats(); renderList(); renderCart(); document.getElementById('search').addEventListener('input', e=>{ state.q = e.target.value.trim(); renderList(); }); })
+</script>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div>
+        <h1>کترینگ اوستا — چلوکبابی</h1>
+        <div class="meta">اسکن QR روی میز → مشاهده منو و ثبت سفارش</div>
+      </div>
+      <div class="meta">تماس مدیریت: ۰۹۱۹۳۴۳۴۸۱۳۹۳ — مدیریت: سلمانی</div>
+    </header>
+
+    <div class="controls">
+      <input id="search" class="search" placeholder="جستجو در منو..." />
+      <div id="cats" class="cats"></div>
+    </div>
+
+    <div class="layout">
+      <main>
+        <div id="list" class="grid"></div>
+      </main>
+
+      <aside class="aside">
+        <label>شماره میز یا نام مشتری (الزامی)</label>
+        <input id="table" type="text" placeholder="مثلاً میز 5 یا اسم مشتری" />
+        <label>توضیحات سفارش (اختیاری)</label>
+        <input id="customer" type="text" placeholder="مثلاً بدون پیاز، کم نمک" />
+
+        <h4 style="margin-top:12px">🛒 سبد خرید</h4>
+        <div id="cartList" class="cart-list"></div>
+        <div style="margin-top:10px"><strong>جمع کل: <span id="total">۰ تومان</span></strong></div>
+        <button class="checkout" onclick="submitOrder()">ثبت سفارش و ارسال به آشپزخانه</button>
+      </aside>
+    </div>
+
+    <footer class="footer">نسخهٔ کامل — مدیریت: سلمانی — ۰۹۱۹۳۴۳۴۸۱۳۹۳</footer>
+  </div>
+</body>
+</html>
