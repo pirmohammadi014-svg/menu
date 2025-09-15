@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+  <meta charset="UTF-8">
+  <title>سفارش‌های آشپزخانه</title>
+  <style>
+    body { font-family: sans-serif; direction: rtl; background: #f0f0f0; padding: 1rem; }
+    h1 { text-align: center; color: #8B0000; }
+    .order { background: #fff; margin: 1rem; padding: 1rem; border-radius: 10px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+  </style>
+</head>
+<body>
+<h1>سفارش‌های آشپزخانه</h1>
+<div id="orders"></div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js"></script>
+<script>
+const { createClient } = supabase;
+const SUPABASE_URL = "https://btwyxylbtwjvahciqwiq.supabase.co";
+const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ0d3l4eWxidHdqdmFoY2lxd2lxIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTc0MDQzMzQsImV4cCI6MjA3Mjk4MDMzNH0.yR3kq5iv4XYdEOYXpkKtBKhUb8hvPCs3XeykRmwLDvE";
+const db = createClient(SUPABASE_URL, SUPABASE_KEY);
+
+async function loadOrders() {
+  let { data, error } = await db.from("orders").select("*").order("id", { ascending: false });
+  if (error) {
+    console.error(error);
+    return;
+  }
+  const container = document.getElementById("orders");
+  container.innerHTML = "";
+  data.forEach(order => {
+    const div = document.createElement("div");
+    div.className = "order";
+    div.innerHTML = `<h3>مشتری: ${order.customer}</h3><p>جمع کل: ${order.total} تومان</p><ul>${order.items.map(i=>"<li>"+i.name+"</li>").join("")}</ul>`;
+    container.appendChild(div);
+  });
+}
+
+loadOrders();
+setInterval(loadOrders, 5000);
+</script>
+</body>
+</html>
