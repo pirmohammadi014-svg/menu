@@ -34,7 +34,7 @@ function renderOrders(list){
   list.forEach(o=>{
     const div = document.createElement('div'); div.className='order';
     const left = document.createElement('div');
-    left.innerHTML = `<div><strong>میز: ${ o.table_number || '—' } ${ o.customer ? '— '+o.customer : '' }</strong></div><div class="small">زمان: ${ new Date(o.created_at||o.time||Date.now()).toLocaleString('fa-IR') }</div><ul class="items">${ (o.items||[]).map(it=>`<li>${it.name} — ${it.qty} عدد</li>`).join('') }</ul>`;
+    left.innerHTML = `<div><strong>میز: ${ o.table_number || '—' } ${ o.customer ? '— '+o.customer : '' }</strong></div><div class="small">زمان: ${ new Date(o.created_at||o.time||Date.now()).toLocaleString('fa-IR')}</div><ul class="items">${ (o.items||[]).map(it=>`<li>${it.name} — ${it.qty} عدد</li>`).join('') }</ul>`;
     const right = document.createElement('div'); const btn = document.createElement('button'); btn.className='btn btn-ready'; btn.textContent='آماده شد'; btn.onclick = ()=> markReady(o.id);
     right.appendChild(btn); div.appendChild(left); div.appendChild(right); out.appendChild(div);
   })
